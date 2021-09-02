@@ -10,28 +10,8 @@ const bookNavs = books.map((res) => ({
 const CUSTOM_DOC_ROOT_PATH = path.resolve(process.cwd(), "src");
 
 const category = {
-  computer: {
-    title: "计算机基础",
-    data: [],
-  },
-  algorithm: {
-    title: "算法",
-    data: [],
-  },
-  frontend: {
-    title: "前端开发",
-    data: [],
-  },
   backend: {
     title: "后端开发",
-    data: [],
-  },
-  fengine: {
-    title: "前端工程化",
-    data: [],
-  },
-  performance: {
-    title: "前端性能优化",
     data: [],
   },
   architect: {
