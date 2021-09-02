@@ -27,7 +27,7 @@ const rmTrin = function (str) {
     .replace(/（/g, "(")
     .replace(/）/g, ")")
     .replace(/\%/g, "")
-    .replace(/\|/, " ")
+    .replace(/\|/, "")
     .replace(/[\?：，]/g, "");
 };
 
