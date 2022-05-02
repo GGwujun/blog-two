@@ -22,6 +22,10 @@ const category = {
     title: "管理",
     data: [],
   },
+  worklife:{
+    title: "工作生活",
+    data: [],
+  },
   other: {
     title: "杂谈",
     data: [],
