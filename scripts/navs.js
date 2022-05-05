@@ -10,8 +10,16 @@ const bookNavs = books.map((res) => ({
 const CUSTOM_DOC_ROOT_PATH = path.resolve(process.cwd(), "src");
 
 const category = {
+  java: {
+    title: "java开发",
+    data: [],
+  },
   backend: {
     title: "后端开发",
+    data: [],
+  },
+  bigdata: {
+    title: "大数据",
     data: [],
   },
   architect: {
