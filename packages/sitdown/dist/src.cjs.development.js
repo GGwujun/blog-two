@@ -2,6 +2,7 @@
 
 Object.defineProperty(exports, "__esModule", { value: true });
 
+
 function _defineProperties(target, props) {
   for (var i = 0; i < props.length; i++) {
     var descriptor = props[i];
@@ -64,11 +65,11 @@ function isKeep(options, node) {
   var filters = options.keepFilter ? options.keepFilter : ["div", "style"];
   return Array.isArray(filters)
     ? filters.some(function (filter) {
-        return filter === node.nodeName.toLowerCase();
-      })
+      return filter === node.nodeName.toLowerCase();
+    })
     : typeof filters === "function"
-    ? filters(node, options)
-    : filters === node.nodeName.toLowerCase();
+      ? filters(node, options)
+      : filters === node.nodeName.toLowerCase();
 }
 
 function fenceReplacement(content, node, options) {
@@ -89,7 +90,7 @@ function fenceReplacement(content, node, options) {
     ((node.firstChild &&
       node.firstChild.textContent &&
       node.firstChild.textContent.endsWith("\n")) ||
-    !content
+      !content
       ? ""
       : "\n") +
     endFence +
@@ -604,11 +605,11 @@ function isHeadingRow(tr) {
   var parentNode = tr.parentNode;
   return parentNode
     ? parentNode.nodeName === "THEAD" ||
-        (parentNode.firstChild === tr &&
-          (parentNode.nodeName === "TABLE" || isFirstTbody(parentNode)) &&
-          every.call(tr.childNodes, function (n) {
-            return n.nodeName === "TH";
-          }))
+    (parentNode.firstChild === tr &&
+      (parentNode.nodeName === "TABLE" || isFirstTbody(parentNode)) &&
+      every.call(tr.childNodes, function (n) {
+        return n.nodeName === "TH";
+      }))
     : false;
 }
 
@@ -749,9 +750,9 @@ var applyIndentedCodeBlockRule = function applyIndentedCodeBlockRule(service) {
       var indent = repeat(" ", caclListIndent(node, options));
       return node.firstChild && node.firstChild.textContent
         ? "\n\n```\n" +
-            indent +
-            node.firstChild.textContent.replace(/\n/g, "\n" + indent) +
-            "\n\n```\n"
+        indent +
+        node.firstChild.textContent.replace(/\n/g, "\n" + indent) +
+        "\n\n```\n"
         : "\n\n    \n\n";
     },
   });
@@ -810,7 +811,7 @@ var applyLinkRule = function applyLinkRule(service) {
       var href = node.getAttribute("href");
       var nodecode = node.getAttribute("nodecode");
 
-      if (nodecode) return  "[" + content + "](" + href + node.title + ")";;
+      if (nodecode) return "[" + content + "](" + href + node.title + ")";;
 
       if (!href && !content) {
         return "";
@@ -852,12 +853,21 @@ var applyLinkRule = function applyLinkRule(service) {
 var applyImageRule = function applyImageRule(service) {
   service.addRule("hr", {
     filter: "img",
-    replacement: function replacement(_content, node) {
+    replacement: function replacement(_content, node, options) {
       var alt = node.getAttribute("alt") || "";
       var src = node.getAttribute("src") || "";
+      service.mdImages.push(src)
       var title = node.title || "";
       var titlePart = title ? ' "' + title + '"' : "";
-      return src ? "![" + alt + "]" + "(" + src + titlePart + ")" : "";
+      try {
+        var domainPattern = /^(https?:\/\/[^/]+)(.*)$/;
+        const imgNoOrigin = src.split("?")[0].match(domainPattern);
+        const dest = imgNoOrigin[1].replace(/\./g, "").replace(/\:/g, "").replace(/\//g, "") + imgNoOrigin[2].replace(/\//g, "")
+        const destSrc = `${options.assetsPublicPath}/${dest}`
+        return src ? "![" + alt + "]" + "(" + destSrc + titlePart + ")" : "";
+      } catch (error) {
+        return src ? "![" + alt + "]" + "(" + src + titlePart + ")" : "";
+      }
     },
   });
 };
@@ -1144,7 +1154,7 @@ function canParseHTMLNatively() {
     if (new Parser().parseFromString("", "text/html")) {
       canParse = true;
     }
-  } catch (e) {}
+  } catch (e) { }
 
   return canParse;
 }
@@ -1152,7 +1162,7 @@ function canParseHTMLNatively() {
 var Parser =
   /*#__PURE__*/
   (function () {
-    function Parser() {}
+    function Parser() { }
 
     var _proto = Parser.prototype;
 
@@ -1704,6 +1714,7 @@ var Sitdown =
       this.service = new Service(
         _extends({}, this.defaultOptions, {}, options)
       );
+      this.service.mdImages = []
       applyPlugins(this.service);
     }
 

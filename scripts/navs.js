@@ -41,14 +41,18 @@ const category = {
 };
 
 const getNav = function (nav) {
-  return Object.keys(nav).map((cla) => ({
-    title: nav[cla].title,
-    children: nav[cla].data.map((book) => ({
-      title: book.title,
-      path: `/${book.title}`,
-    })),
-  }));
+  return Object.keys(nav).map((cla) => {
+    return nav[cla].data && nav[cla].data.length && {
+      title: nav[cla].title,
+      children: nav[cla].data.map((book) => ({
+        title: book.title,
+        path: `/${book.title}`,
+      })),
+      slug: cla
+    }
+  }).filter(Boolean);
 };
+
 
 exports.getBookNavs = function () {
   [...bookNavs, ...scan(CUSTOM_DOC_ROOT_PATH)].forEach((book) => {
